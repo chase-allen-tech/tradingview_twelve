@@ -172,7 +172,7 @@ export default {
 
           var current = new Date();
           // var d_time = (current.getDate() * 86400 + current.getHours() * 3600 + current.getMinutes() * 60) - (current.getUTCDate() * 86400 + current.getUTCHours() * 3600 + current.getUTCMinutes() * 60) + 73800;
-          var d_time = (16 * 60 + 25) * 60 * 1000;
+          var d_time = (16 * 60 + 30) * 60 * 1000;
 
           txTime += d_time;
 
@@ -189,7 +189,7 @@ export default {
             }
 
             latestBar.volume += transaction.day_volume
-            console.log('[update bar]', printDate(latestBar));
+            console.log('[update bar]', printDate(latestBar.time));
             onRealtimeCallback(latestBar)
           } else if (latestBar && txTime > latestBar.time) {
             const newBar = {
@@ -201,7 +201,7 @@ export default {
               time: txTime
             }
             latestBar = newBar
-            console.log('[new Bar]', printDate(newBar))
+            console.log('[new Bar]', printDate(newBar.time))
             onRealtimeCallback(newBar)
           }
 
