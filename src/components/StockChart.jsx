@@ -52,8 +52,6 @@ const StockChart = () => {
         let symbolData = data.data.map(item => item.symbol);
         symbolData = [...new Set(symbolData)];
         setSymbols(symbolData);
-
-
       } catch (err) {
 
       }

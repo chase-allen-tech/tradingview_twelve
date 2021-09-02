@@ -11,6 +11,12 @@ const sendResolutions = {
   1: "1min", 5: "5min", 15: '15min', 30: '30min', 45: '45min', 60: '1h', 120: '2h', 240: '4h', '1D': '1day'
 }
 
+function printDate(mm) {
+  let date = new Date(mm);
+  let tt = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + ":" + date.getSeconds();
+  return tt;
+}
+
 
 export const configurationData = {
   supported_resolutions: ["1", "5", "15", "30", "45", "60", "120", "240", "1D"],
@@ -123,7 +129,7 @@ export default {
       });
 
       latestBar = bars[bars.length - 1];
-      console.log('[latestBar]', latestBar);
+      console.log('[latestBar]', printDate(latestBar.time));
 
       onHistoryCallback(bars, { noData: false });
     } catch (error) {
@@ -162,13 +168,15 @@ export default {
           const seconds = INTERVAL_SECONDS[convertResolution(resolution)]
 
           var txTime = Math.floor(transaction.timestamp / seconds) * seconds * 1000 - (1440 + 30) * 60 * 1000
-          console.log(latestBar.time, txTime);
+          console.log('[input_time]', printDate(latestBar.time), printDate(txTime));
 
           var current = new Date();
-          var d_time = (current.getDate() * 86400 + current.getHours() * 3600 + current.getMinutes() * 60) - (current.getUTCDate() * 86400 + current.getUTCHours() * 3600 + current.getUTCMinutes() * 60) + 73800;
-          console.log("[delta time]", d_time);
+          // var d_time = (current.getDate() * 86400 + current.getHours() * 3600 + current.getMinutes() * 60) - (current.getUTCDate() * 86400 + current.getUTCHours() * 3600 + current.getUTCMinutes() * 60) + 73800;
+          var d_time = (16 * 60 + 25) * 60 * 1000;
 
-          txTime -= d_time * 1000;
+          txTime += d_time;
+
+          console.log("[delta time]", printDate(latestBar.time), printDate(txTime));
 
           if (latestBar && txTime == latestBar.time) {
             latestBar.close = transaction.price
@@ -181,7 +189,7 @@ export default {
             }
 
             latestBar.volume += transaction.day_volume
-            console.log('[update bar]', latestBar)
+            console.log('[update bar]', printDate(latestBar));
             onRealtimeCallback(latestBar)
           } else if (latestBar && txTime > latestBar.time) {
             const newBar = {
@@ -193,7 +201,7 @@ export default {
               time: txTime
             }
             latestBar = newBar
-            console.log('[new Bar]', newBar)
+            console.log('[new Bar]', printDate(newBar))
             onRealtimeCallback(newBar)
           }
 
