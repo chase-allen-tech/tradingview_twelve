@@ -1,29 +1,14 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Datafeed from "./datafeed";
 
 const Chart = (props) => {
 
-  const { symbol, interval, width, height } = props;
-
-  const [tvWidget, setTVWidget] = useState(null);
+  const { symbol, stock, interval, width, height } = props;
 
   useEffect(() => {
     if (symbol && interval) {
       console.log('[entered]');
-      var disabledFeatures = [
-        // "header_symbol_search",
-        // "header_compare",
-        // "header_saveload",
-        // // "timeframes_toolbar",
-        // // "legend_widget",
-        // "main_series_scale_menu",
-        // "header_settings",
-        // "header_resolutions",
-        // "header_screenshot",
-        // "header_undo_redo",
-      ];
-      // if (!isHistory) disabledFeatures.push("timeframes_toolbar");
 
       // eslint-disable-next-line no-undef
       const widget = (window.tvWidget = new TradingView.widget({
@@ -44,23 +29,12 @@ const Chart = (props) => {
           "mainSeriesProperties.candleStyle.borderDownColor": "#E20E7C", // Down Candle Border Color
           "mainSeriesProperties.candleStyle.drawBorder": false, // Disable candle borders
         },
-        disabled_features: disabledFeatures,
+        disabled_features: [],
         time_frames: [],
       }));
-
-      widget.onChartReady(async () => {
-        widget
-          .activeChart()
-          .onVisibleRangeChanged()
-          .subscribe(null, ({ from, to }) => {
-
-          });
-      });
-
-      setTVWidget(widget);
     }
   }, [symbol, interval]);
-  return <div id="tv_chart_container" height={height} width={width} style={{height: 500}}></div>;
+  return <div id="tv_chart_container" height={height} width={width} style={{height: 400}}></div>;
 }
 
 export default Chart;
