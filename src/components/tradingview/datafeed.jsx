@@ -145,7 +145,7 @@ export default {
           "action": "subscribe",
           "params": {
             "symbols": [{
-              "symbol": "AAPL",
+              "symbol": symbolName,
               "exchange": "NASDAQ",
               "price": true
             }],
