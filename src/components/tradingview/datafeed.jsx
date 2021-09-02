@@ -170,7 +170,7 @@ export default {
           var d_time = (current.getDate() * 86400 + current.getHours() * 3600 + current.getMinutes() * 60) - (current.getUTCDate() * 86400 + current.getUTCHours() * 3600 + current.getUTCMinutes() * 60)
           console.log("d_time", d_time);
 
-          if (latestBar && txTime * 1000 == latestBar.time - current.getTime()) {
+          if (latestBar && txTime * 1000 == latestBar.time - d_time * 1000) {
             latestBar.close = transaction.price
             if (transaction.price > latestBar.high) {
               latestBar.high = transaction.price
@@ -183,7 +183,7 @@ export default {
             latestBar.volume += transaction.day_volume
             console.log(latestBar)
             onRealtimeCallback(latestBar)
-          } else if (latestBar && txTime * 1000 > latestBar.time - current.getTime()) {
+          } else if (latestBar && txTime * 1000 > latestBar.time - d_time * 1000) {
             const newBar = {
               low: transaction.price,
               high: transaction.price,
