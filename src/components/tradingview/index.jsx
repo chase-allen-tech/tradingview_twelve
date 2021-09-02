@@ -29,7 +29,7 @@ const Chart = (props) => {
           "mainSeriesProperties.candleStyle.borderDownColor": "#E20E7C", // Down Candle Border Color
           "mainSeriesProperties.candleStyle.drawBorder": false, // Disable candle borders
         },
-        disabled_features: [],
+        disabled_features: ["header_symbol_search"],
         time_frames: [],
       }));
     }
