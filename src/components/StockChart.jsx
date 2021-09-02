@@ -11,12 +11,18 @@ const StockChart = () => {
   console.log('[show]', stock);
 
   const [chartSymbol, setChartSymbol] = useState('AAPL');
-  const [chartStock, setChartStock] = useState('stock');
+  const [chartStock, setChartStock] = useState('Stock');
 
   useEffect(() => {
-    async function evalSymbol() {
+    // if (stock == 'stock') {
+    //   url = "https://api.twelvedata.com/stocks?symbol=";
+    // } else if (stock == 'forex') {
+    //   url = "https://api.twelvedata.com/forex_pairs?symbol=";
+    // } else if (stock == 'crypto') {
+    //   url = "https://api.twelvedata.com/cryptocurrencies?symbol=";
+    // }
+    async function evalStock() {
       try {
-        let url = 'https://api.twelvedata.com/symbol_search?symbol=';
         // if (stock == 'stock') {
         //   url = "https://api.twelvedata.com/stocks?symbol=";
         // } else if (stock == 'forex') {
@@ -24,6 +30,38 @@ const StockChart = () => {
         // } else if (stock == 'crypto') {
         //   url = "https://api.twelvedata.com/cryptocurrencies?symbol=";
         // }
+        
+        let res = await fetch('https://api.twelvedata.com/stocks?symbol=' + symbol);
+        let data = await res.json();
+        if(data.data.length) {
+          setStock('Stock'); return;
+        }
+
+        res = await fetch('https://api.twelvedata.com/forex_pairs?symbol=' + symbol);
+        data = await res.json();
+        if(data.data.length) {
+          setStock('Forex'); return;
+        }
+
+        res = await fetch('https://api.twelvedata.com/cryptocurrencies?symbol=' + symbol);
+        data = await res.json();
+        if(data.data.length) {
+          setStock('Crypto'); return;
+        }
+
+      } catch (err) {
+
+      }
+    }
+
+    evalStock();
+  }, [symbol]);
+
+  useEffect(() => {
+    async function evalSymbol() {
+      try {
+        let url = 'https://api.twelvedata.com/symbol_search?symbol=';
+
         const res = await fetch(url + symbol);
         const data = await res.json();
 
@@ -35,7 +73,7 @@ const StockChart = () => {
     }
 
     evalSymbol();
-  }, [symbol, stock]);
+  }, [symbol]);
 
   const onSubmit = () => {
     setChartStock(stock);
@@ -61,11 +99,7 @@ const StockChart = () => {
         <div className="col-md-5">
           <div className="form-group">
             <label htmlFor="">Stock</label>
-            <select name="" id="" className="form-control" onChange={e => setStock(e.target.value)} value={stock}>
-              <option value="stock">Stock</option>
-              <option value="forex">Forex</option>
-              <option value="crypto">Cryptocurrency</option>
-            </select>
+            <input type="text" className="form-control" value={stock} readOnly />
           </div>
         </div>
         <div className="col-md-5">
