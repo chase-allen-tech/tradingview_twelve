@@ -129,6 +129,7 @@ export default {
       });
 
       latestBar = bars[bars.length - 1];
+      window.delta = 0;
       console.log('[latestBar]', printDate(latestBar.time));
 
       onHistoryCallback(bars, { noData: false });
@@ -145,6 +146,7 @@ export default {
     try {
       let ws = new WebSocket(`wss://ws.twelvedata.com/v1/quotes/price?apikey=${API_KEY}`);
       ws.onopen = (e) => {
+        window.delta = 0;
         console.log('[ws onopen]');
         let sendData = {
           "action": "subscribe",
@@ -174,7 +176,11 @@ export default {
           // var d_time = (current.getDate() * 86400 + current.getHours() * 3600 + current.getMinutes() * 60) - (current.getUTCDate() * 86400 + current.getUTCHours() * 3600 + current.getUTCMinutes() * 60) + 73800;
           var d_time = (16 * 60 + 30) * 60 * 1000;
 
-          txTime += d_time;
+          if(window.delta == 0) {
+            window.delta = latestBar.time - txTime;
+          }
+
+          txTime += window.delta;
 
           console.log("[delta time]", printDate(latestBar.time), printDate(txTime));
 
