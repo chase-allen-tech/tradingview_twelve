@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Datafeed from "./datafeed";
 
 const Chart = (props) => {
@@ -31,10 +31,15 @@ const Chart = (props) => {
         },
         disabled_features: ["header_symbol_search"],
         time_frames: [],
+
       }));
+
+      widget.onChartReady(async () => {
+        widget.activeChart().setTimezone('UTC');
+      })
     }
   }, [symbol, interval]);
-  return <div id="tv_chart_container" height={height} width={width} style={{height: 400}}></div>;
+  return <div id="tv_chart_container" height={height} width={width} style={{ height: 400 }}></div>;
 }
 
 export default Chart;
