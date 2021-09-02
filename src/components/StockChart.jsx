@@ -8,28 +8,12 @@ const StockChart = () => {
   const [stock, setStock] = useState('stock');
   const [isShow, setShow] = useState(false);
 
-  console.log('[show]', stock);
-
   const [chartSymbol, setChartSymbol] = useState('AAPL');
   const [chartStock, setChartStock] = useState('Stock');
 
   useEffect(() => {
-    // if (stock == 'stock') {
-    //   url = "https://api.twelvedata.com/stocks?symbol=";
-    // } else if (stock == 'forex') {
-    //   url = "https://api.twelvedata.com/forex_pairs?symbol=";
-    // } else if (stock == 'crypto') {
-    //   url = "https://api.twelvedata.com/cryptocurrencies?symbol=";
-    // }
     async function evalStock() {
       try {
-        // if (stock == 'stock') {
-        //   url = "https://api.twelvedata.com/stocks?symbol=";
-        // } else if (stock == 'forex') {
-        //   url = "https://api.twelvedata.com/forex_pairs?symbol=";
-        // } else if (stock == 'crypto') {
-        //   url = "https://api.twelvedata.com/cryptocurrencies?symbol=";
-        // }
         
         let res = await fetch('https://api.twelvedata.com/stocks?symbol=' + symbol);
         let data = await res.json();
@@ -65,7 +49,10 @@ const StockChart = () => {
         const res = await fetch(url + symbol);
         const data = await res.json();
 
-        setSymbols(data.data);
+        let symbolData = data.data.map(item => item.symbol);
+        symbolData = [...new Set(symbolData)];
+        setSymbols(symbolData);
+
 
       } catch (err) {
 
@@ -76,6 +63,7 @@ const StockChart = () => {
   }, [symbol]);
 
   const onSubmit = () => {
+    setShow(false);
     setChartStock(stock);
     setChartSymbol(symbol);
   }
@@ -98,7 +86,7 @@ const StockChart = () => {
       <div className="row">
         <div className="col-md-5">
           <div className="form-group">
-            <label htmlFor="">Stock</label>
+            <label htmlFor="">Type</label>
             <input type="text" className="form-control" value={stock} readOnly />
           </div>
         </div>
@@ -112,7 +100,7 @@ const StockChart = () => {
                 <ul class="list-group">
                   {
                     symbols.map((item, key) =>
-                      <li class="list-group-item" key={key} onClick={() => onItemClick(item.symbol)}>{item.symbol} ({item.exchange})</li>
+                      <li class="list-group-item" key={key} onClick={() => onItemClick(item)}>{item}</li>
                     )
                   }
                 </ul>

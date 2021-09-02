@@ -96,6 +96,8 @@ export default {
 
       let url = `https://api.twelvedata.com/time_series?symbol=${symbolInfo.name}&outputsize=1000&interval=${resName}&apikey=${API_KEY}`;
 
+      console.log(url);
+
       const response = await fetch(url);
       const data = await response.json();
 
@@ -135,10 +137,7 @@ export default {
     console.log('[rec]', symbolInfo.name, resolution, resName)
 
     try {
-      // const url = `https://api.twelvedata.com/time_series?symbol=${symbolInfo.name}&outputsize=10&interval=${resName}&apikey=${API_KEY}`;
-
       let ws = new WebSocket(`wss://ws.twelvedata.com/v1/quotes/price?apikey=${API_KEY}`);
-
       ws.onopen = (e) => {
         console.log('[ws onopen]');
         let sendData = {
